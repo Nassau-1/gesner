@@ -1,0 +1,112 @@
+Gesner Free Use and Share-Alike License 1.0
+Copyright (c) 2026 Enzo Terrier (Nassau-1) and contributors.
+
+This is a custom source-available software license. It is not an OSI-approved
+open-source license. The restrictions on monetization are intentional.
+
+1. Definitions
+"Software" means the code, documentation and assets provided under this license,
+including modifications and derivative works of that material.
+"Licensor" means each copyright holder offering their material under this license.
+"You" means the person or entity exercising rights under this license.
+"Corresponding Source" means the preferred form for modifying the covered
+Software, including your changes and the build scripts, dependency manifests and
+instructions necessary to build it. It does not include private credentials,
+scraped data, general-purpose tools or independent third-party components.
+"Distribute" includes making copies or downloads available to another person.
+"Monetize" means obtaining money or other consideration in exchange for the
+Software or its functionality, as described in section 3.
+
+2. Free personal and business use
+Subject to these conditions, each Licensor grants you a worldwide, royalty-free,
+nonexclusive license to use, run, study, copy, modify and distribute their
+Software and derivative works. You may use the Software for personal,
+educational, nonprofit and internal business purposes, including work performed
+by employees of a for-profit business.
+
+You may use lawfully obtained output in your own work, including commercial
+reports, analysis and other products whose primary value is not access to this
+Software or an equivalent extraction service. This license does not claim
+ownership of output and grants no rights to third-party website content.
+
+The grant for a version already received is perpetual and irrevocable while
+you comply with these terms, subject to section 7. A later license or policy
+change does not remove your existing compliant rights under this license.
+
+3. No monetization of the Software
+You must not:
+(a) sell, rent, sublicense for a fee, or charge for copies, distribution,
+    downloads, installation, access, features or use of the Software;
+(b) provide the Software or substantially its functionality as a paid hosted,
+    API, scraping, subscription, managed or other service;
+(c) use a paywall, license key, mandatory donation, advertising-funded access,
+    data monetization or similar mechanism to generate revenue from the Software;
+(d) include the Software in a paid product or bundle, or require a purchase
+    of another product or service to obtain or use it; or
+(e) charge for support or customization sold specifically as a service for
+    this Software.
+
+Renaming, wrapping, modifying, bundling or splitting the Software into components
+does not avoid these restrictions. Free internal use by a business, ordinary
+employee compensation for internal development, and commercial use of output
+as described in section 2 are not monetization of the Software. An unsolicited
+gift that is not requested, conditioned on access, or exchanged for services
+does not by itself violate this section.
+
+4. Free distribution and source sharing
+Every distribution of covered Software must be free of charge and licensed to
+its recipients under this same license, without additional restrictions. Include
+this license and preserve existing copyright and attribution notices. Clearly
+identify modified versions and describe significant changes.
+
+For executable or packaged distributions, provide the complete Corresponding
+Source with the distribution or a clear link to an exact-version source download
+available without payment or an account requirement. Keep that source accessible
+for as long as you distribute that version. If you offer the Software's
+functionality to others through a network, provide those users the same free
+access to the Corresponding Source, including your modifications.
+
+You must not replace this license with terms that permit monetization of
+material you received under this license. Independent works merely used beside
+the Software are not covered solely by that fact. Third-party material remains
+subject to its own license; this license does not relicense it.
+
+5. Contributions and attribution
+When you intentionally submit a contribution for inclusion in this project,
+you offer it under this license unless you clearly state otherwise before
+submission. You retain ownership of your contribution. Submit only material
+you have the authority to license on these terms.
+
+Preserve the credit "Enzo Terrier (Nassau-1)" for the project and existing
+contributor notices. This license grants no trademark rights or permission to
+suggest endorsement by a Licensor. Label forks or modified versions accurately.
+
+6. Patents
+Each Licensor grants a royalty-free, worldwide, nonexclusive license under
+patent claims they control that are necessarily infringed by their contribution
+alone or its inclusion in the Software, solely to exercise the permissions
+granted here. No other patent rights are granted. If you initiate patent
+litigation alleging the Software infringes a patent, your patent grant under
+this license terminates on filing.
+
+7. Noncompliance
+Your rights terminate automatically if you violate these conditions. For your
+first violation, rights are reinstated if you fully cure it within 30 days after
+you first become aware of it and take reasonable steps to correct prior
+noncompliant distributions. Repeated violations require express reinstatement
+from the affected Licensor. Termination does not terminate the rights of
+recipients who comply with this license.
+
+8. No warranty; limitation of liability
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE SOFTWARE IS PROVIDED
+"AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+NO LICENSOR OR CONTRIBUTOR IS LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN CONTRACT, TORT OR OTHERWISE, ARISING FROM THE SOFTWARE OR ITS USE.
+Nothing here excludes liability or rights that applicable law does not allow
+to be excluded.
+
+9. Scope
+No rights are granted beyond those expressly stated. Statutory rights that
+cannot be restricted by license are unaffected. If a provision is unenforceable,
+the remaining provisions apply to the extent permitted by law.

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Gesner</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+<header class="appbar"><div class="identity"><img class="app-icon" src="icons/icon-32.png" width="24" height="24" alt=""><h1>Gesner</h1><span id="source">Connecting…</span></div></header>
+<main>
+<div class="ribbon" aria-label="Collection tools">
+<section class="tool-group source-tools"><h2>Data source</h2><div class="tool-row"><button id="detect">Detect tables</button><select id="candidate" aria-label="Detected structures" disabled><option>Choose a table or list</option></select><button id="another" title="Try another table" disabled>Next table</button></div></section>
+<section class="tool-group crawl-tools"><h2>Collection</h2><div class="tool-row"><select id="mode" aria-label="Crawl mode"><option value="next">Next button</option><option value="scroll">Infinite scroll</option></select><button id="pick" disabled>Locate “Next”</button><button id="start" class="primary" disabled>Start crawl</button><button id="stop" disabled>Stop</button></div><div class="settingsbar">
+<div class="settings"><label>Delay <input id="delay" type="number" min="0.5" max="30" step="0.5" value="1" aria-label="Min delay (seconds)"> s</label><label>Max wait <input id="wait" type="number" min="1" max="60" value="20" aria-label="Max wait (seconds)"> s</label><label>Step limit <input id="limit" type="number" min="1" max="100" value="20"></label></div>
+<details id="next-panel" class="popover"><summary>Next selector</summary><div class="popover-body"><label for="next">Next control selector</label><input id="next" type="text" placeholder="Select on page or enter CSS" autocomplete="off" spellcheck="false"><p>Select the page’s next-page control. Start crawl activates it; selecting alone does not.</p></div></details>
+
+</div>
+</section>
+<section class="tool-group export-tools"><h2>Export</h2><div class="tool-row"><button id="xlsx" disabled>Excel</button><button id="csv" disabled>CSV</button><button id="copy" disabled>Copy all</button></div></section>
+</div>
+<section class="results" aria-label="Collected data">
+<div class="resultbar"><h2 id="stats">0 rows · 0 pages</h2><button id="clear" class="text-button">Clear session</button><div class="result-tools">
+<details id="column-panel" class="popover"><summary>Columns</summary><div class="popover-body"><div class="popover-heading"><strong>Rename or hide columns</strong><button id="reset" class="text-button">Reset</button></div><div id="columns"></div></div></details>
+<label class="search"><span class="sr-only">Filter rows</span><input id="filter" type="search" placeholder="Filter rows…"></label>
+</div></div>
+<div class="table-wrap" tabindex="0" aria-label="Data preview"><table id="preview"><thead></thead><tbody></tbody></table><div id="empty">Detect a table to start.</div></div>
+<div class="sheetbar"><span class="sheet-tab">Data</span><p id="preview-note">Choose a structure to preview it here.</p></div>
+</section>
+</main>
+<footer><p id="status" role="status" aria-live="polite">Ready.</p></footer>
+<script type="module" src="popup.js"></script>
+</body></html>

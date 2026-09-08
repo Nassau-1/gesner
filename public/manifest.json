@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Gesner",
+  "version": "1.0.0",
+  "description": "Extract tables and lists locally. No telemetry, no accounts, no cloud. By Enzo Terrier (Nassau-1).",
+  "action": {
+    "default_title": "Open Gesner",
+    "default_icon": {
+      "32": "icons/icon-32.png",
+      "24": "icons/icon-24.png",
+      "16": "icons/icon-16.png"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "type": "module",
+    "service_worker": "background.js"
+  },
+  "author": "Enzo Terrier (Nassau-1)",
+  "icons": {
+    "32": "icons/icon-32.png",
+    "128": "icons/icon-128.png",
+    "48": "icons/icon-48.png",
+    "16": "icons/icon-16.png"
+  }
+}
