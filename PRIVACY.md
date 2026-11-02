@@ -1,5 +1,5 @@
 # Privacy policy
-Effective date: 2026-09-08. Applies to Gesner v1.0.0.
+Effective date: 2026-11-02. Applies to Gesner v1.0.0–v1.0.1, including the internal MCI variant.
 
 ## What the extension processes
 After you activate the extension and choose to detect data, it reads visible text and link/image URLs from selected page structures in the source tab. The source page title is used for export filenames. Collection and pagination happen only following your actions.
@@ -17,6 +17,8 @@ activeTab grants temporary access following toolbar activation. scripting runs t
 A source website can still collect data and issue requests when you click pagination controls or scroll. Your browser, operating system, clipboard manager, downloaded-file synchronization and other extensions have their own behavior and policies. This extension does not control them.
 
 Development dependency downloads and GitHub services are outside the installed extension's runtime. No external requests were observed in the synthetic extraction/export test; this is evidence for the tested flow, not a guarantee about every website.
+
+The internal MCI variant includes an HTTPS update URL. The browser, independently of the extraction code, checks GitHub for signed extension updates. These requests may contain the extension identifier/version and ordinary connection metadata. They do not include extracted page contents, page titles, source URLs or exports. The public unpacked build has no update URL. Company Portal and device-management services have their own policies.
 
 ## Questions
 Contact the maintainer through the [GitHub profile](https://github.com/Nassau-1). Do not include sensitive page contents in a public issue. See [SECURITY.md](SECURITY.md) for reporting guidance.

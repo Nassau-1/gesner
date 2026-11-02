@@ -22,3 +22,7 @@ tsc emits ES modules in dist; the build copies public assets. Only dist is loade
 Chrome documentation: [activeTab](https://developer.chrome.com/docs/extensions/develop/concepts/activeTab), [scripting](https://developer.chrome.com/docs/extensions/reference/api/scripting), [extension CSP](https://developer.chrome.com/docs/extensions/reference/manifest/content-security-policy).
 
 See [decision](decisions/ADR-002-extraction.md) and [verification](verification.md).
+
+## Managed distribution
+
+The MCI packaging script stages a separate variant with a stable public key and HTTPS update URL, then invokes Chromium's CRX3 packer. The private key is external to this repo. A user-context Intune package adds independent force-list entries under four browser policy roots. Detection reads enabled installation metadata without modifying browser preferences; all extraction remains local. See [ADR-004](decisions/ADR-004-managed-distribution.md) and the [deployment guide](../deployment/mci/README.md).

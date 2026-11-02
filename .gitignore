@@ -7,3 +7,7 @@ dist/
 exports/
 work/
 .DS_Store
+*.pem
+*.key
+*.crx
+*.intunewin

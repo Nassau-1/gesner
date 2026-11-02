@@ -1,5 +1,10 @@
 # Roadmap
-v1.0.0 is available with table/list detection, local exports and bounded crawling.
+v1.0.1 adds a signed internal MCI deployment channel to the existing local extraction features.
+
+Managed deployment follow-up:
+- Confirm force-install and update on the MCI pilot in Vivaldi, then Chrome/Brave/Chromium as used. Package tests do not prove delivery.
+- Edge on Entra-only Windows needs a separate supported Store channel; do not advertise universal Chromium deployment.
+- Back up the private MCI signing key to an approved private secret store; never attach it to a release or commit it.
 
 Future improvements:
 - Better handling of complex multi-row headers and optional list fields.

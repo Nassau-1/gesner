@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 — 2026-11-02
+
+- Internal MCI CRX3 packaging with a stable private signing key, HTTPS update manifest and vendor-specific browser policies.
+- User-context Intune installer restricted to MCI Entra-joined devices. Preserve other extensions and remove only owned policy entries.
+- Detect enabled, versioned browser installation instead of a web link or marker; document Edge and other browser limits.
+- Extraction behavior and runtime permissions remain unchanged. Browser-managed internal-channel update traffic is documented separately.
+
 ## 1.0.0 — 2026-09-08
 First stable release of Gesner by Enzo Terrier (Nassau-1).
 
