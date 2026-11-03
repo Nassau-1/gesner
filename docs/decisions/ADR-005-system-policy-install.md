@@ -24,3 +24,11 @@ Machine policies also affect other users on that PC. The assignment remains volu
 Use Company Portal uninstall to remove only owned HKLM entries; let browsers refresh normally. To stop new requests, remove the new Available assignment. Retain prior packages and source; reverting to the user-context package restores its known permission failure and is not a functional repair.
 
 Rejected: weakening HKCU ACLs, arbitrary per-user hive loading, running user-writable detection code as SYSTEM, replacing browser preferences, claiming policy-only success, changing the signed CRX unnecessarily.
+
+## 2026-11-03 — modern browser detection follow-up
+
+Pilot log confirms successful HKLM writes followed by two 1618 retries; Enzo confirms Gesner is present in Vivaldi. Code review found detection requires the obsolete `state=1` preference. Current Chromium derives disabled status from `disable_reasons`, with no state field. Objective: recognize modern registered, versioned extensions while still rejecting disabled, blocklisted, externally uninstalled or unknown entries. No policy, assignment, CRX or permission change.
+
+Plan: add a failing synthetic modern-profile regression; implement backward-compatible preference reading with registration and blocklist checks; exercise both the packaged installer and generated detector with modern profiles; rebuild installer-only MCI.4 and update the existing SYSTEM app/detection. Verify tests, generated PowerShell and persisted Intune properties. Rollback: retain MCI.3 package/detector; known risk is false-negative detection, not failed policy writing. Target portal status remains a separate verification step.
+
+Upstream sources: [Chromium extension preferences](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/extensions/browser/extension_prefs.cc), [blocklist preferences](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/extensions/browser/blocklist_extension_prefs.cc). These establish the format bug; target profile contents were not inspected and the precise pilot false-negative cause remains inferred.

@@ -2,6 +2,8 @@
 
 ## Unreleased — 2026-11-03
 
+- Recognize modern browser extension preferences without legacy state=1; retain versioned registration, disable-reason, blocklist and external-uninstall checks. Cover the false-negative and both generated detection and installer paths with synthetic profiles.
+
 - Correct confirmed HKCU policy access denial with SYSTEM/HKLM deployment, validated machine ownership and safe uninstall; replace the old User-context Intune app.
 - Embed reviewed code and identity/version in generated detection; require four machine policies and an enabled extension in a registered user profile, without executing AppData code.
 - Add isolated registry install/retry/detection/repair/uninstall tests and installer-only staging without rebuilding the signed CRX.

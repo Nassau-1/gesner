@@ -2,7 +2,7 @@
 
 Prepared 2026-11-02. Import/assignment and target-device installation must be recorded separately from package validation.
 
-Machine-policy installer revision 3 (2026-11-03) corrects the pilot's confirmed access denial writing HKCU policies. Run as **SYSTEM** and write HKLM policies, with ownership in `HKLM\Software\MoveCapital\Gesner-MCI` and diagnostics in `%WINDIR%\Logs\Gesner-MCI\install.log`. The prior revision 2 log established the cause; its user-context installation is superseded. Package verification is separate from pilot browser acceptance. See [system deployment decision](../../docs/decisions/ADR-005-system-policy-install.md).
+Machine-policy installer revision 4 (2026-11-03) corrects the pilot's confirmed access denial writing HKCU policies. Run as **SYSTEM** and write HKLM policies, with ownership in `HKLM\Software\MoveCapital\Gesner-MCI` and diagnostics in `%WINDIR%\Logs\Gesner-MCI\install.log`. Revision 4 also recognizes modern Chromium registration/disable_reasons preferences as well as legacy state=1; disabled, blocklisted, externally uninstalled and unknown entries still fail detection. The prior revision 2 log established the permission cause; its user-context installation is superseded. Package verification is separate from pilot browser acceptance. See [system deployment decision](../../docs/decisions/ADR-005-system-policy-install.md).
 
 ## Why the old portal item did not install Gesner
 
@@ -27,7 +27,7 @@ For installer-only updates, retain the previously verified CRX config and run `n
 
 ## Intune settings
 
-- Name: **Gesner — Extension navigateurs MCI**; publisher/developer: Enzo Terrier; version: 1.0.1 MCI.3 (CRX remains 1.0.1).
+- Name: **Gesner — Extension navigateurs MCI**; publisher/developer: Enzo Terrier; version: 1.0.1 MCI.4 (CRX remains 1.0.1).
 - App type: Windows app (Win32), x64, Windows 11 24H2 minimum.
 - Install behavior: **System**, 64-bit. Intune supplies the elevated token; requesting users need no local administrator rights. The old app locks its User context: create a replacement System app, then remove the old Available assignment after the replacement is saved.
 - Install command: `%SystemRoot%\Sysnative\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File Install.ps1`.

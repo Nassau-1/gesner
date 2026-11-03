@@ -14,7 +14,7 @@ try {
     $stateDirectory = Join-Path $env:SystemRoot 'Logs\Gesner-MCI'
     New-Item -ItemType Directory -Path $stateDirectory -Force | Out-Null
     $script:logPath = Join-Path $stateDirectory 'install.log'
-    Write-GesnerInstallLog 'Starting MCI machine-policy installer revision 3.'
+    Write-GesnerInstallLog 'Starting MCI machine-policy installer revision 4.'
     $phase = 'LoadCore'
     . (Join-Path $PSScriptRoot 'Core.ps1')
     $phase = 'ValidateConfig'

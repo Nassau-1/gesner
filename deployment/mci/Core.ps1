@@ -72,6 +72,31 @@ function Get-GesnerValues([string]$Key) {
     return ,$values
 }
 
+function Test-GesnerEnabledEntry($Entry, $Config, [string]$DiskVersion) {
+    # Chromium now derives enabled state from disable_reasons; old profiles use state.
+    # Fail closed on unknown values rather than treating missing state alone as success.
+    foreach ($field in @('blacklist_state', 'omaha_blocklist_state', 'extension_telemetry_service_blocklist_state', 'blacklist')) {
+        $flag = $Entry.PSObject.Properties[$field]
+        if ($null -ne $flag -and -not (($flag.Value -is [bool] -and -not $flag.Value) -or (($flag.Value -is [int] -or $flag.Value -is [long]) -and $flag.Value -eq 0))) { return $false }
+    }
+    $reasons = $Entry.PSObject.Properties['disable_reasons']
+    if ($null -ne $reasons) {
+        if ($null -eq $reasons.Value) { return $false }
+        foreach ($reason in @($reasons.Value)) {
+            if (-not ($reason -is [int] -or $reason -is [long]) -or $reason -ne 0) { return $false }
+        }
+    }
+    $state = $Entry.PSObject.Properties['state']
+    if ($null -ne $state) { return (($state.Value -is [int] -or $state.Value -is [long]) -and $state.Value -eq 1) }
+    # Without the old state, require a registered manifest matching the disk version.
+    $registered = $Entry.PSObject.Properties['manifest']
+    if ($null -eq $registered -or $null -eq $registered.Value) { return $false }
+    $name = $registered.Value.PSObject.Properties['name']
+    $version = $registered.Value.PSObject.Properties['version']
+    if ($null -eq $name -or $null -eq $version -or $name.Value -cne 'Gesner') { return $false }
+    return ([string]$version.Value -ceq $DiskVersion -and [version]$version.Value -ge [version]$Config.version)
+}
+
 function Get-GesnerInstalledProfiles($Config, [string]$LocalData = $env:LOCALAPPDATA) {
     foreach ($browser in Get-GesnerBrowsers) {
         $data = Join-Path $LocalData $browser.Data
@@ -93,12 +118,13 @@ function Get-GesnerInstalledProfiles($Config, [string]$LocalData = $env:LOCALAPP
                         $preferences = Get-Content -LiteralPath $preferencesPath -Raw | ConvertFrom-Json
                         $extensions = $preferences.PSObject.Properties['extensions']
                         if ($null -eq $extensions) { continue }
+                        $uninstalled = $extensions.Value.PSObject.Properties['external_uninstalls']
+                        if ($null -ne $uninstalled -and @($uninstalled.Value) -ccontains $Config.extensionId) { break }
                         $settings = $extensions.Value.PSObject.Properties['settings']
                         if ($null -eq $settings) { continue }
                         $entry = $settings.Value.PSObject.Properties[$Config.extensionId]
                         if ($null -eq $entry) { continue }
-                        $state = $entry.Value.PSObject.Properties['state']
-                        if ($null -ne $state -and $state.Value -eq 1) { $enabled = $true }
+                        $enabled = Test-GesnerEnabledEntry $entry.Value $Config ([string]$manifest.version)
                         break
                     }
                     if ($enabled) { [pscustomobject]@{ Browser = $browser.Name; Version = $manifest.version }; break }

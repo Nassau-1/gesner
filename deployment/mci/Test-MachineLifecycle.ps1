@@ -57,6 +57,16 @@ function Start-Sleep { param(`$Seconds) }
     @{ extensions = @{ settings = $settings } } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $profile 'Secure Preferences')
     Run 'Install.ps1' 0
     Run 'Detect.ps1' 0
+    $settings[$config.extensionId] = @{ manifest = @{ name = 'Gesner'; version = '1.0.1' }; disable_reasons = @() }
+    @{ extensions = @{ settings = $settings } } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $profile 'Secure Preferences')
+    Run 'Install.ps1' 0
+    Run 'Detect.ps1' 0
+    $settings[$config.extensionId].disable_reasons = @(4)
+    @{ extensions = @{ settings = $settings } } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $profile 'Secure Preferences')
+    Run 'Detect.ps1' 1
+    Run 'Install.ps1' 1618
+    $settings[$config.extensionId].disable_reasons = @()
+    @{ extensions = @{ settings = $settings } } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $profile 'Secure Preferences')
     Run 'Install.ps1' 0
     $state = (Get-ItemProperty -LiteralPath $stateKey -Name State).State | ConvertFrom-Json
     Assert (@($state.owned).Count -eq 4) 'Repeated installation must not duplicate ownership.'
