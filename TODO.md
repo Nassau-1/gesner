@@ -2,8 +2,8 @@
 v1.0.1 adds a signed internal MCI deployment channel to the existing local extraction features.
 
 Managed deployment follow-up:
-- Publish MCI.4 detection follow-up to the existing SYSTEM app and confirm portal status. MCI.3 pilot log proves successful HKLM policy writes; Enzo confirms Gesner present in Vivaldi. Legacy-only state detection caused a reproducible false negative with modern Chromium fixtures; target profile contents were not inspected.
-- Confirm force-install and update on the MCI pilot in Vivaldi, then Chrome/Brave/Chromium as used. Package tests do not prove delivery.
+- Completed 2026-11-03: SYSTEM/MCI.4 published; Enzo confirms Gesner present in Vivaldi and Company Portal now shows installed. Target preferences were not inspected; modern-format false-negative was reproduced and fixed in fixtures.
+- Verify future extension update and actual uninstall on the Vivaldi pilot, then Chrome/Brave/Chromium as used. The current Vivaldi installation does not prove other browsers or the update/uninstall lifecycle.
 - Edge on Entra-only Windows needs a separate supported Store channel; do not advertise universal Chromium deployment.
 - Back up the private MCI signing key to an approved private secret store; never attach it to a release or commit it.
 

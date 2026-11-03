@@ -1,7 +1,7 @@
 # ADR-005 — MCI system-context installation
 
 - Date: 2026-11-03
-- Status: accepted for corrective pilot; target installation not yet verified
+- Status: accepted; Enzo confirmed Vivaldi installation and Company Portal installed status on 2026-11-03 after MCI.4 publication
 
 ## Evidence and objective
 
