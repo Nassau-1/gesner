@@ -42,7 +42,7 @@ Everything runs locally. No account, API key, or upload.
 
 Vivaldi users can use `vivaldi://extensions` for the same manual flow. A Company Portal **web link** to this repository does not install an extension.
 
-For managed MCI Windows computers, see [internal browser deployment](deployment/mci/README.md). This separate signed channel targets Vivaldi, Chrome, Brave and Chromium; support must be verified on the target device.
+For managed MCI Windows computers, see [internal browser deployment](deployment/mci/README.md). This separate signed channel uses a SYSTEM-context installer with device policies for Vivaldi, Chrome, Brave and Chromium; support must be verified on the target device.
 
 [Usage guide](docs/usage.md) · [Supported pages and limits](docs/usage.md#limits)
 

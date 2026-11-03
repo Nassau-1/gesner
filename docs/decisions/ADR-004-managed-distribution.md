@@ -1,7 +1,7 @@
 # ADR-004 — Signed internal MCI browser distribution
 
 - Date: 2026-11-02
-- Status: accepted; requested internal distribution
+- Status: accepted; user-context policy installation superseded by [ADR-005](ADR-005-system-policy-install.md) on 2026-11-03
 
 ## Problem
 

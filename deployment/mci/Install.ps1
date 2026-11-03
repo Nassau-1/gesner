@@ -1,4 +1,4 @@
-# Intune Win32, USER context, 64-bit. Never closes or launches a browser.
+# Intune Win32, SYSTEM context, 64-bit. Never closes or launches a browser.
 $script:logPath = $null
 $phase = 'InitializeLog'
 function Write-GesnerInstallLog([string]$Message) {
@@ -11,24 +11,25 @@ function Write-GesnerInstallLog([string]$Message) {
 }
 try {
     $ErrorActionPreference = 'Stop'
-    $stateDirectory = Join-Path $env:LOCALAPPDATA 'Gesner-MCI'
+    $stateDirectory = Join-Path $env:SystemRoot 'Logs\Gesner-MCI'
     New-Item -ItemType Directory -Path $stateDirectory -Force | Out-Null
     $script:logPath = Join-Path $stateDirectory 'install.log'
-    Write-GesnerInstallLog 'Starting MCI installer diagnostics revision 2.'
+    Write-GesnerInstallLog 'Starting MCI machine-policy installer revision 3.'
     $phase = 'LoadCore'
     . (Join-Path $PSScriptRoot 'Core.ps1')
     $phase = 'ValidateConfig'
     $config = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'config.json') -Raw | ConvertFrom-Json
     Assert-GesnerConfig $config
+    $phase = 'ValidateAdministrator'
+    Assert-GesnerAdministrator
     $phase = 'ValidateMciJoin'
-    $join = (& "$env:SystemRoot\System32\dsregcmd.exe" /status) -join "`n"
-    if ($join -notmatch 'AzureAdJoined\s*:\s*YES' -or $join -notmatch ('TenantId\s*:\s*' + [regex]::Escape($config.tenantId))) { throw 'This installer requires an Entra-joined MCI device.' }
+    Assert-GesnerMciJoin $config
     Write-GesnerInstallLog 'MCI join validated.'
     $entry = $config.extensionId + ';' + $config.updateUrl
     $plans = @()
     foreach ($browser in Get-GesnerBrowsers) {
         $phase = 'PlanPolicy:' + $browser.Name
-        $root = 'HKCU:\Software\Policies\' + $browser.Policy
+        $root = (Get-GesnerPolicyBase) + $browser.Policy
         $key = $root + '\ExtensionInstallForcelist'
         $settings = Get-ItemProperty -LiteralPath $root -Name ExtensionSettings -ErrorAction SilentlyContinue
         if ($null -ne $settings) {
@@ -39,24 +40,24 @@ try {
         $plans += [pscustomobject]@{ Key = $key; Name = $slot.Name; Add = $slot.Add }
     }
     $phase = 'LoadOwnership'
-    $statePath = Join-Path $stateDirectory 'deployment.json'
+    $stateKey = Get-GesnerOwnershipKey
     $owned = @()
-    if (Test-Path -LiteralPath $statePath) {
-        $previous = Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json
-        if ($previous.extensionId -ne $config.extensionId) { throw 'Existing installer state belongs to another identity.' }
-        $owned = @($previous.owned)
+    if (Test-Path -LiteralPath $stateKey) {
+        $previous = (Get-ItemProperty -LiteralPath $stateKey -Name State).State | ConvertFrom-Json
+        $owned = @(Get-GesnerOwnedEntries $previous $config)
     }
-    $phase = 'CopyDetectionFiles'
-    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Core.ps1') -Destination (Join-Path $stateDirectory 'Core.ps1') -Force
-    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'config.json') -Destination (Join-Path $stateDirectory 'config.json') -Force
     foreach ($plan in $plans) {
         if (-not $plan.Add) { continue }
         $phase = 'WritePolicy:' + $plan.Key
         Write-GesnerInstallLog ('Applying policy: ' + $plan.Key)
         if ((Get-GesnerValues $plan.Key).ContainsKey($plan.Name)) { throw 'Policy changed during installation; retry.' }
         # Record ownership before the write, so interrupted installs can be removed safely.
-        $owned += [pscustomobject]@{ Key = $plan.Key; Name = $plan.Name; Value = $entry }
-        @{ extensionId = $config.extensionId; owned = $owned } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $statePath -Encoding UTF8
+        if (@($owned | Where-Object { $_.Key -eq $plan.Key -and $_.Name -eq $plan.Name -and $_.Value -ceq $entry }).Count -eq 0) {
+            $owned += [pscustomobject]@{ Key = $plan.Key; Name = $plan.Name; Value = $entry }
+        }
+        $state = @{ extensionId = $config.extensionId; scope = 'Machine'; owned = $owned } | ConvertTo-Json -Depth 5 -Compress
+        if (-not (Test-Path -LiteralPath $stateKey)) { New-Item -Path $stateKey -Force | Out-Null }
+        New-ItemProperty -LiteralPath $stateKey -Name State -Value $state -PropertyType String -Force | Out-Null
         if (-not (Test-Path -LiteralPath $plan.Key)) { New-Item -Path $plan.Key -Force | Out-Null }
         New-ItemProperty -LiteralPath $plan.Key -Name $plan.Name -Value $entry -PropertyType String -Force | Out-Null
     }
@@ -64,7 +65,7 @@ try {
     Write-GesnerInstallLog 'Gesner policies configured. The browser must download and enable the signed extension before detection succeeds.'
     # Intune performs detection immediately afterwards. Allow policy refresh in an already-open browser.
     for ($attempt = 0; $attempt -lt 30; $attempt++) {
-        if (@(Get-GesnerInstalledProfiles $config).Count -gt 0) { Write-GesnerInstallLog 'Enabled profile detected. ExitCode=0'; exit 0 }
+        if (@(Get-GesnerDeviceInstalledProfiles $config).Count -gt 0) { Write-GesnerInstallLog 'Enabled profile detected. ExitCode=0'; exit 0 }
         Start-Sleep -Seconds 5
     }
     Write-GesnerInstallLog 'Extension not confirmed yet. Open/restart Vivaldi or Chrome, then retry from Company Portal. ExitCode=1618'

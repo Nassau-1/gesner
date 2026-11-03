@@ -4,6 +4,7 @@ import { createHash, createPublicKey, generateKeyPairSync } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { stageIntune } from './stage-intune.mjs';
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const [chromium, signingKey, output] = process.argv.slice(2);
@@ -39,8 +40,5 @@ await writeFile(path.join(out, name + ".zip"), crx.subarray(12 + crx.readUInt32L
 await writeFile(path.join(out, "gesner-mci-updates.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<gupdate xmlns="http://www.google.com/update2/response" protocol="2.0"><app appid="${id}"><updatecheck codebase="${channel.crxUrl}" version="${manifest.version}" /></app></gupdate>\n`);
 const config = { ...channel, extensionId: id, version: manifest.version, crxSha256: createHash("sha256").update(crx).digest("hex") };
 await writeFile(path.join(out, "config.json"), JSON.stringify(config, null, 2) + "\n");
-await cp(path.join(root, "deployment/mci"), path.join(out, "intune"), { recursive: true });
-await writeFile(path.join(out, "intune/config.json"), JSON.stringify(config, null, 2) + "\n");
-const detector = await readFile(path.join(out, "intune/Detect.ps1"), "utf8");
-await writeFile(path.join(out, "intune/Detect.ps1"), detector.replaceAll("__EXTENSION_ID__", id).replaceAll("__VERSION__", manifest.version));
+await stageIntune(config, path.join(out, 'intune'));
 console.log(JSON.stringify(config, null, 2));

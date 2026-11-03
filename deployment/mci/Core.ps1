@@ -1,6 +1,42 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+function Assert-GesnerAdministrator {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal($identity)
+    if (-not [Environment]::Is64BitProcess -or -not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) { throw 'The machine-policy package requires 64-bit SYSTEM/admin context.' }
+}
+
+function Get-GesnerPolicyBase { 'HKLM:\Software\Policies\' }
+function Get-GesnerOwnershipKey { 'HKLM:\Software\MoveCapital\Gesner-MCI' }
+
+function Assert-GesnerMciJoin($Config) {
+    $join = (& "$env:SystemRoot\System32\dsregcmd.exe" /status) -join "`n"
+    if ($join -notmatch 'AzureAdJoined\s*:\s*YES' -or $join -notmatch ('TenantId\s*:\s*' + [regex]::Escape($Config.tenantId))) { throw 'This installer requires an Entra-joined MCI device.' }
+}
+
+function Get-GesnerOwnedEntries($State, $Config) {
+    if ($State.extensionId -ne $Config.extensionId -or $State.scope -ne 'Machine') { throw 'Invalid deployment ownership identity/scope.' }
+    $allowed = @((Get-GesnerBrowsers) | ForEach-Object { (Get-GesnerPolicyBase) + $_.Policy + '\ExtensionInstallForcelist' })
+    foreach ($owned in $State.owned) {
+        if ($owned.Key -notin $allowed -or $owned.Name -notmatch '^[1-9]\d*$' -or $owned.Value -cne ($Config.extensionId + ';' + $Config.updateUrl)) { throw 'Invalid ownership record.' }
+    }
+    @($State.owned)
+}
+
+function Get-GesnerDeviceLocalData {
+    foreach ($profile in Get-ChildItem -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList') {
+        if ($profile.PSChildName -notmatch '^S-1-(5-21|12-1)-\d+-\d+-\d+-\d+$') { continue }
+        $path = [Environment]::ExpandEnvironmentVariables([string]$profile.GetValue('ProfileImagePath'))
+        if (-not [IO.Path]::IsPathRooted($path) -or $path.StartsWith('\\')) { continue }
+        Join-Path $path 'AppData\Local'
+    }
+}
+
+function Get-GesnerDeviceInstalledProfiles($Config) {
+    foreach ($localData in Get-GesnerDeviceLocalData) { Get-GesnerInstalledProfiles $Config $localData }
+}
+
 function Get-GesnerBrowsers {
     @(
         [pscustomobject]@{ Name = 'Vivaldi'; Policy = 'Vivaldi'; Data = 'Vivaldi\User Data' }

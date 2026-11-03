@@ -2,7 +2,10 @@
 
 ## Unreleased — 2026-11-03
 
-- Persist local MCI installer diagnostics with the failing phase, exception type and message. Keep tenant guards, browser policies, detection and exit codes unchanged.
+- Correct confirmed HKCU policy access denial with SYSTEM/HKLM deployment, validated machine ownership and safe uninstall; replace the old User-context Intune app.
+- Embed reviewed code and identity/version in generated detection; require four machine policies and an enabled extension in a registered user profile, without executing AppData code.
+- Add isolated registry install/retry/detection/repair/uninstall tests and installer-only staging without rebuilding the signed CRX.
+- Diagnostic revision 2 persisted the failing phase, exception type and message without changing policies/detection; its pilot log established the permission failure corrected above.
 - Test invalid configuration and unavailable log directory without touching production browser policies.
 
 ## 1.0.1 — 2026-11-02

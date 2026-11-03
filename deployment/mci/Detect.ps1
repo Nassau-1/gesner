@@ -1,15 +1,18 @@
-# Generated package replaces __EXTENSION_ID__ / __VERSION__; no marker-only success.
+# Self-contained at staging: never executes code from installed/user-writable paths.
+__CORE__
 try {
-    . (Join-Path $env:LOCALAPPDATA 'Gesner-MCI\Core.ps1')
-    $config = Get-Content -LiteralPath (Join-Path $env:LOCALAPPDATA 'Gesner-MCI\config.json') -Raw | ConvertFrom-Json
+    $config = [pscustomobject]@{
+        extensionId = '__EXTENSION_ID__'; version = '__VERSION__'
+        tenantId = 'd9ef70ce-45e1-4de9-9547-4a1fa301bf70'
+        updateUrl = 'https://github.com/Nassau-1/gesner/releases/download/mci-channel/gesner-mci-updates.xml'
+    }
     Assert-GesnerConfig $config
-    if ($config.extensionId -ne '__EXTENSION_ID__' -or [version]$config.version -lt [version]'__VERSION__') { exit 1 }
     $entry = $config.extensionId + ';' + $config.updateUrl
     foreach ($browser in Get-GesnerBrowsers) {
-        $values = Get-GesnerValues ('HKCU:\Software\Policies\' + $browser.Policy + '\ExtensionInstallForcelist')
-        if (-not (@($values.Values) -contains $entry)) { exit 1 }
+        $values = Get-GesnerValues ((Get-GesnerPolicyBase) + $browser.Policy + '\ExtensionInstallForcelist')
+        if (-not (@($values.Values) -ccontains $entry)) { exit 1 }
     }
-    if (@(Get-GesnerInstalledProfiles $config).Count -eq 0) { exit 1 }
-    Write-Output ('Gesner ' + $config.version + ' configured in four browsers and enabled in at least one profile.')
+    if (@(Get-GesnerDeviceInstalledProfiles $config).Count -eq 0) { exit 1 }
+    Write-Output ('Gesner ' + $config.version + ' configured for the device and enabled in at least one registered user profile.')
     exit 0
 } catch { exit 1 }
