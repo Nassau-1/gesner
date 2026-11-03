@@ -2,6 +2,8 @@
 
 Prepared 2026-11-02. Import/assignment and target-device installation must be recorded separately from package validation.
 
+Diagnostic installer revision 2 (2026-11-03) keeps a local `%LOCALAPPDATA%\Gesner-MCI\install.log`, including its failing phase and exception message. It records no browsing content or certificate secrets and sends no telemetry. The log survives IME cache cleanup. A directory-only diagnostic log is never an installation success signal. Run `Test-InstallDiagnostics.ps1` to check failure reporting with invalid fixtures, without a production registry write. This revision does not claim to fix the pilot's exit1603.
+
 ## Why the old portal item did not install Gesner
 
 The Intune item `7d461f23-e492-4990-bb1f-f2c19c2fed7e` is a web link to GitHub. A web link cannot load an extension into a browser. The replacement is a Win32 installer plus a signed, browser-managed CRX3 channel.

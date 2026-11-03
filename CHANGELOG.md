@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — 2026-11-03
+
+- Persist local MCI installer diagnostics with the failing phase, exception type and message. Keep tenant guards, browser policies, detection and exit codes unchanged.
+- Test invalid configuration and unavailable log directory without touching production browser policies.
+
 ## 1.0.1 — 2026-11-02
 
 - Internal MCI CRX3 packaging with a stable private signing key, HTTPS update manifest and vendor-specific browser policies.

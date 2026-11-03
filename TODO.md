@@ -2,6 +2,7 @@
 v1.0.1 adds a signed internal MCI deployment channel to the existing local extraction features.
 
 Managed deployment follow-up:
+- Diagnose the 2026-11-03 pilot exit1603 using the diagnostic installer revision; no successful target-device installation confirmed.
 - Confirm force-install and update on the MCI pilot in Vivaldi, then Chrome/Brave/Chromium as used. Package tests do not prove delivery.
 - Edge on Entra-only Windows needs a separate supported Store channel; do not advertise universal Chromium deployment.
 - Back up the private MCI signing key to an approved private secret store; never attach it to a release or commit it.
